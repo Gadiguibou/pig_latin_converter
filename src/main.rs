@@ -15,7 +15,7 @@ fn main() {
 
     while let Some(c) = chars.next() {
         let suffix = match c {
-            'a' | 'e' | 'i' | 'o' | 'u' => {
+            'a' | 'e' | 'i' | 'o' | 'u' | 'A' | 'E' | 'I' | 'O' | 'U' => {
                 new_s.push(c);
                 String::from("-hay")
             }
