@@ -1,45 +1,43 @@
+use std::io;
+
 fn main() {
-    let s = "";
-    println!("'{}' is '{}' in pig latin.", s, convert_to_pig_latin(s))
-}
+    println!("Enter the string to convert.");
 
-fn convert_to_pig_latin(s:&str) -> String {
-    let split: Vec<&str> = s.split_whitespace().collect();
+    let mut input = String::new();
 
-    let mut final_split: Vec<String> = Vec::new();
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read stdin");
 
-    for word in split {
-        let chars: Vec<char>  = word.chars().collect();
+    let mut chars = input.chars().peekable();
 
-        let word = 
-            if ['a', 'e', 'i', 'o', 'u'].contains(&chars[0]) {
-                let mut word = String::new();
+    let mut new_s = String::new();
 
-                for char in &chars {
-                    word.push(*char);
+    while let Some(c) = chars.next() {
+        let suffix = match c {
+            'a' | 'e' | 'i' | 'o' | 'u' => {
+                new_s.push(c);
+                String::from("-hay")
+            }
+            'a'..='z' | 'A'..='Z' => format!("-{}ay", c),
+            _ => {
+                new_s.push(c);
+                continue;
+            }
+        };
+
+        while let Some(&c) = chars.peek() {
+            match c {
+                'a'..='z' | 'A'..='Z' => {
+                    chars.next();
+                    new_s.push(c);
                 }
-                word.push_str("-hay");
+                _ => break,
+            }
+        }
 
-                word
-            } else {
-                let mut word = String::new();
-
-                if chars[0].is_uppercase() {
-                    word.push_str(&chars[1].to_uppercase().to_string());
-                } else {
-                    word.push(chars[1]);
-                }
-
-                for char in &chars[2..] {
-                    word.push(*char);
-                }
-                word.push_str(&["-", &chars[0].to_lowercase().to_string(), "ay"].join(""));
-
-                word
-            };
-
-        final_split.push(word);
+        new_s += &suffix;
     }
 
-    final_split.join(" ")
+    println!("{}", new_s);
 }
