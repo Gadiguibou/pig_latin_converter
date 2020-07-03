@@ -19,7 +19,7 @@ fn main() {
                 new_s.push(c);
                 String::from("-hay")
             }
-            'a'..='z' | 'A'..='Z' => format!("-{}ay", c),
+            'a'..='z' | 'A'..='Z' => format!("-{}ay", c.to_lowercase()),
             _ => {
                 new_s.push(c);
                 continue;
